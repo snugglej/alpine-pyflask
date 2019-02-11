@@ -5,8 +5,8 @@ LABEL Version="0.1"
 EXPOSE 5000
 RUN apk add python3 build-base openldap-dev python3-dev \
 && pip3 install --upgrade pip \ 
-&& pip3 install flask python-ldap \
+&& pip3 install virtualenv python-ldap\
 && apk del build-base openldap-dev python3-dev \
-&& mkdir /python-project \
-WORKDIR /python-projcet
-CMD "python /python-project/routes.py"
+&& if [ ! -d /python-project ]; then mkdir /python-project; fi
+WORKDIR /python-project
+CMD "virtualenv /python-project && pip install flask && if [ -f /python-project/routes.py ]; then python3 /python-project/routes.py; fi"
